@@ -1,0 +1,120 @@
+﻿@{
+    ViewBag.Title = "Contact";
+}
+
+
+<style>
+    #map {
+        text-align: center;
+        margin: auto;
+        /*width: 1500px;
+        min-height: auto;*/
+        background-color: #FFFFFF;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    input[type=text], select, textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+    }
+
+    label {
+        padding: 12px 12px 12px 0;
+        display: inline-block;
+    }
+
+    input[type=submit] {
+        background-color: #fb8d17;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        float: right;
+    }
+
+        input[type=submit]:hover {
+            background-color: #FFF7E6;
+            color: black;
+        }
+
+    .container {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+    }
+
+    .col-25 {
+        float: left;
+        width: 25%;
+        margin-top: 6px;
+    }
+
+    .col-75 {
+        float: left;
+        width: 75%;
+        margin-top: 6px;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+</style>
+
+
+<body>
+    <div style="display:flex">
+
+        <div style="margin-top:50px; width:40%; margin-left:150px" class="container">
+            <div style="margin-left:40px">
+                <div class="row">
+                    <div class="col-25">
+                        <label for="fname">Email</label>
+                    </div>
+                    <div class="col-75">
+                        <input style="width:300px" type="text" id="fname" name="firstname" placeholder="Your name..">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="lname">Name</label>
+                    </div>
+                    <div class="col-75">
+                        <input type="text" id="lname" name="lastname" placeholder="Your last name..">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-25">
+                        <label for="subject">Subject</label>
+                    </div>
+                    <div class="col-75">
+                        <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
+                    </div>
+                </div>
+                <div style="margin-right: 80px;" class="row">
+                    <input onclick="myFunction()" type="submit" value="Submit">
+                </div>
+            </div>
+        </div>
+        <div id="map" style="width:60%;height:500px;">
+
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.292807347442!2d106.59838101532097!3d10.865319560516387!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752b088de30f3b%3A0xd2140740d360f705!2zKEhVRkxJVCkgVFLGr-G7nE5HIMSQ4bqgSSBI4buMQyBOR0_huqBJIE5H4buuIC0gVElOIEjhu4xDIFRQLiBI4buSIENIw40gTUlOSCBDxqAgU-G7niBJSQ!5e0!3m2!1sen!2s!4v1639555400201!5m2!1sen!2s" width="600" height="450" style="border:0; margin-top:50px" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+</body>
+<script>
+function myFunction() {
+    alert("Chúng tôi đã nhận được phản hồi của bạn !");
+    window.open("https://localhost:44342/");
+}
+</script>

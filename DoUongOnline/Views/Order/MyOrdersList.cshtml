@@ -1,0 +1,70 @@
+﻿@model IEnumerable<DoUongOnline.DB.DonHang>
+
+@{
+    ViewBag.Title = "MyOrdersList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .container {
+        margin-top: 30px;
+    }
+
+    h2 {
+        text-align: center;
+    }
+</style>
+
+
+<div class="container">
+    <h2>Đơn hàng của tôi</h2>
+    @using (Html.BeginForm())
+    {
+        <div class="row" style="margin-top:0px;margin-bottom:10px">
+            <div class="col-md-3">
+                <label for="date_start">Ngày</label>
+                @Html.TextBox("beginDate", null, new { @type = "date", @class = "form-control" })
+
+            </div>
+            <div class="col-md-2">
+                <label for="date_end" style="visibility:hidden">End Date</label>
+                <input type="submit" onclick="return checkday()" class="btn btn-primary btn-block" value="Tra đơn hàng">
+            </div>
+        </div>
+    }
+    <table class="table table-bordered table-striped">
+
+        <tr>
+            <th>STT</th>
+            <th>Ngày đặt đơn</th>
+            <th>Địa chỉ</th>
+            <th>Tổng tiền</th>
+            <th>
+                Tình trạng
+                @using (Html.BeginForm("MyOrdersList", "Order", FormMethod.Get))
+                {
+
+                    @Html.TextBox("search", "", new { @style = "margin-right:10px" })
+                    <input class="btn-primary" type="submit" value="Tìm kiếm" />
+                }
+            </th>
+
+        </tr>
+
+        @{
+            int i = 0;
+            foreach (var item in Model)
+            {
+                i++;
+                <tr>
+                    <td>@i</td>
+                    <td>@item.NgayTaoDon.ToString("dd/MM/yyyy hh:mm:ss tt")</td>
+                    <td>@item.DiaChiGiaoHang</td>
+                    <td>@String.Format("{0:#,##0}đ", item.TongTien)</td>
+                    <td id="tinhtrang">@item.TinhTrangDonHang.TenTinhTrangDH</td>
+                    <td><a href="/Order/OrderDetail/@item.IdDH">Xem chi tiết</a></td>
+                </tr>
+            }
+        }
+    </table>
+</div>

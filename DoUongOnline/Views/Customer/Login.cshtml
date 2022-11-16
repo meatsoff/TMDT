@@ -1,0 +1,190 @@
+﻿@model DoUongOnline.DB.KhachHang
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <title>Login Candidate</title>
+    <link href="~/Content/font-awesome.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    
+</head>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+
+<style>
+    .btn {
+        font-family: 'Raleway', sans-serif;
+        border-color: white;
+    }
+
+    .form-container {
+        margin-top: 120px;
+        margin-bottom: 50px;
+        background: #fb8d17;
+        font-family: 'Raleway', sans-serif;
+        text-align: center;
+        padding: 30px 20px 50px;
+        border-radius: 5%;
+    }
+
+        .form-container .title {
+            color: #fff;
+            font-size: 23px;
+            text-transform: capitalize;
+            letter-spacing: 1px;
+            margin: 0 0 60px;
+        }
+
+        .form-container .form-horizontal {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+        }
+
+    .form-horizontal .form-icon {
+        color: #fb8d17;
+        background-color: #1B394D;
+        font-size: 75px;
+        line-height: 92px;
+        height: 90px;
+        width: 90px;
+        margin: -65px auto 10px;
+        border-radius: 50%;
+    }
+
+    .form-horizontal .form-group {
+        margin: 0 0 10px;
+        position: relative;
+    }
+
+        .form-horizontal .form-group:nth-child(3) {
+            margin-bottom: 30px;
+        }
+
+        .form-horizontal .form-group .input-icon {
+            color: #000;
+            font-size: 23px;
+            position: absolute;
+            left: 0;
+            top: 5px;
+        }
+
+    .form-horizontal .form-control {
+        color: #000;
+        font-size: 16px;
+        font-weight: 600;
+        height: 50px;
+        padding: 10px 10px 10px 40px;
+        margin: 0 0 5px;
+        border: none;
+        border-bottom: 2px solid #e7e7e7;
+        border-radius: 0px;
+        box-shadow: none;
+    }
+
+        .form-horizontal .form-control:focus {
+            box-shadow: none;
+            border-bottom-color: #EC5F20;
+        }
+
+        .form-horizontal .form-control::placeholder {
+            color: #000;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+    .form-horizontal .forgot {
+        font-size: 13px;
+        font-weight: 600;
+        text-align: right;
+        display: block;
+    }
+
+        .form-horizontal .forgot a {
+            color: #fb8d17;
+            transition: all 0.3s ease 0s;
+        }
+
+            .form-horizontal .forgot a:hover {
+                color: #fb8d17;
+                text-decoration: underline;
+            }
+
+    .form-horizontal .signin {
+        color: #000;
+        background-color: #EC5F20;
+        font-size: 17px;
+        text-transform: capitalize;
+        letter-spacing: 2px;
+        width: 100%;
+        padding: 12px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        transition: all 0.4s ease 0s;
+    }
+
+    .form-horizontal .btn:hover,
+    .form-horizontal .btn:focus {
+        font-weight: 600;
+        letter-spacing: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3) inset;
+    }
+
+    .fa-calendar {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+    }
+</style>
+
+<div class="form-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6">
+                <div class="form-container">
+                    <h3 class="title">Đăng Nhập</h3>
+                    <div class="form-horizontal">
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+                            <div style="background-color:white" class="form-icon">
+                                <i class="fa fa-user-circle"></i>
+                            </div>
+                            <div class="form-group">
+                                <span class="input-icon"><i class="fa fa-user"></i></span>
+                                @Html.TextBoxFor(model => model.EmailKH, new { @class = "form-control", @placeholder = "Email" })
+                                @Html.ValidationMessageFor(model => model.EmailKH, null, new { @style = "color:red" })
+                                @*<input type="email" class="form-control" placeholder="Username">*@
+                            </div>
+                            <div class="form-group">
+                                <span class="input-icon"><i class="fa fa-lock"></i></span>
+                                @Html.PasswordFor(model => model.MatKhau, new { @class = "form-control", @placeholder = "Mật khẩu" })
+                                @Html.ValidationMessageFor(model => model.MatKhau, null, new { @style = "color:red" })
+                                @*<input type="password" class="form-control" placeholder="Password">*@
+
+                                <div id="MsgLogin"><p>@ViewBag.MessageLogin</p></div>
+                                <span class="forgot">Bạn chưa có tài khoản? <a href="@Url.Action("Register", "Customer")" style="color:#fb8d17" class="register">Đăng ký</a></span>
+                            </div>
+                            <input style="font-size:2rem; background-color:#fb8d17;color:white" type="submit" value="Đăng nhập" class="btn btn-primary btn-block" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    console.log('@ViewBag.MessageLogin');
+    if ('@ViewBag.MessageLogin' != '') {
+        document.getElementById('MsgLogin').className = "alert alert-danger";
+    }
+</script>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")

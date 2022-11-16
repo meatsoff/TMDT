@@ -1,0 +1,369 @@
+﻿@model DoUongOnline.DB.Cart
+@using DoUongOnline.DB
+@{
+    ViewBag.Title = "Giỏ hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    * {
+        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    }
+
+    .container {
+        max-width: 960px;
+        margin-top: 50px;
+        margin-bottom: 100px;
+    }
+
+    h2 {
+        text-align: center;
+        color: black;
+    }
+
+    label {
+        font-weight: normal !important;
+    }
+
+    h4 {
+        color: black;
+    }
+
+    input[type="text"], input[type="email"] {
+        margin-bottom: 15px;
+    }
+
+    input[type="radio"] {
+        /* remove standard background appearance */
+        /*        -webkit-appearance: none !important;
+        -moz-appearance: none;*/
+        appearance: none !important;
+        /* create custom radiobutton appearance */
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        padding: 3px;
+        /* background-color only for content */
+        background-clip: content-box;
+        border: 2px solid #fb8d17;
+        /*        background-color: #e7e6e7;*/
+        border-radius: 50%;
+    }
+
+        /* appearance for checked radiobutton */
+        input[type="radio"]:checked {
+            background-color: #fb8d17;
+        }
+
+    input[type="radio"], input[type="checkbox"] {
+        margin: 0px 0 5px;
+        line-height: normal;
+    }
+
+    .flex {
+        display: flex;
+        align-items: center;
+    }
+
+    .iconpay {
+        height: 40px;
+    }
+
+    .gach_dai {
+        height: 1px;
+        border-width: 0;
+        color: gray;
+        background-color: gray;
+    }
+
+    .gach_ngan {
+        height: 2px;
+        color: #fb8d17;
+        background-color: #fb8d17;
+        width: 70px;
+        text-align: left;
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 22px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 17px;
+            width: 17px;
+            left: 3px;
+            bottom: 2.6px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #fb8d17;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #fb8d17;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(17px);
+        -ms-transform: translateX(17px);
+        transform: translateX(17px);
+    }
+
+    /*Rounded sliders*/
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+    .btn_TT {
+        border: none !important;
+        border-radius: 50px;
+        background-color: white;
+        color: #fb8d17;
+        height: 50px;
+        width: 120px
+    }
+
+    .list-group {
+        border-radius: 5px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+</style>
+
+<script src="https://js.braintreegateway.com/web/dropin/1.32.1/js/dropin.min.js"></script>
+<script src="https://js.braintreegateway.com/web/3.84.0/js/client.min.js"></script>
+<script src="https://js.braintreegateway.com/web/3.84.0/js/data-collector.min.js"></script>
+
+<script type="text/javascript">
+    function checkTest() {
+        let check = document.getElementById("mychecked").checked;
+        let checked_point = '@Session["Checked_Point"]';
+
+        console.log('Radio_button_check: ', check);
+
+        if (check == false) {
+            let total = @Model.Total_money();
+            document.getElementById("thanhtien").innerHTML = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "đ";
+            document.getElementById("tongdon").value = total;
+            //checked_point = "false";
+            //console.log('Check_point: ', checked_point);
+        }
+        else {
+            let total = @Model.Total_money() - @((Session["customer"] as KhachHang).DiemTichLuy);
+            document.getElementById("thanhtien").innerHTML = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "đ";
+            document.getElementById("tongdon").value = total;
+            checked_point = "true";
+            console.log('Check_point: ', checked_point);
+        }
+
+        '<%Session["Checked_Point"] = "' + checked_point + '"; %>';
+        console.log('Session: ', '@Session["Checked_Point"]');
+    }
+</script>
+
+
+<div class="container">
+    <h2>Xác nhận đơn hàng</h2>
+    @using (Html.BeginForm("Pay", "ShoppingCart", FormMethod.Post, new { id = "formthanhtoan" }))
+    {
+        <input type="hidden" id="nonce" name="nonce" />
+        <input type="hidden" id="deviceData" name="deviceData" />
+        @*LEFT*@
+        <div class="col-lg-6">
+            <h4>Thông tin giao hàng</h4>
+            <hr class="gach_ngan" />
+            <div>
+                <label for="fullName" class="form-label">Tên khách hàng</label>
+                <input type="text" class="form-control" id="fullName" placeholder="" value="@((Session["customer"] as KhachHang).TenKhachHang)" readonly>
+            </div>
+
+            <div>
+                <label for="numPhone" class="form-label">Số điện thoại</label>
+                <input type="text" class="form-control" id="numPhone" value="@((Session["customer"] as KhachHang).SDTKH)" readonly>
+            </div>
+
+            <div>
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" value="@((Session["customer"] as KhachHang).EmailKH)" id="email" readonly>
+            </div>
+
+            <div>
+                <label for="address" class="form-label">Địa chỉ giao hàng</label>
+                <input type="text" class="form-control" id="address" placeholder="@((Session["customer"] as KhachHang).DiaChi)" name="diachigiaohang">
+            </div>
+
+            <div>
+                <label for="note" class="form-label">Ghi chú</label>
+                <textarea class="form-control" id="note" rows="4" cols="50" placeholder="Thêm ghi chú vào đây..." name="ghichudonhang"></textarea>
+            </div>
+
+            <hr class="gach_dai" />
+            <h4>Phương thức thanh toán</h4>
+            <hr class="gach_ngan" />
+            <div class="my-3">
+                <div id="dropin-container"></div>
+                
+            </div>
+
+        </div>
+
+        @*RIGHT*@
+<div class="col-lg-6">
+    <h4>
+        <span>Các món đã chọn</span>
+        <span class="badge bg-primary rounded-pill">@Model.Items.Count()</span>
+    </h4>
+    <hr class="gach_ngan" />
+
+    <ul class="list-group mb-3">
+        @foreach (var item in Model.Items)
+        {
+            decimal total = item._quantity * (decimal)item._sanpham.GiaBan;
+            <li class="list-group-item d-flex justify-content-between lh-sm" style="background-color: white;">
+                <div style="display: flex;">
+                    <div style="margin: 5px 5px 0 0">
+                        <img src="@Url.Content(item._sanpham.HinhAnh)" height="80" width="80" />
+                    </div>
+                    <div>
+                        <div>
+                            <h5><b>@item._quantity x @item._sanpham.TenSP</b></h5>
+                        </div>
+                        <h5>
+                            <span>@item._size, @item._quantity x @item._size</span>
+                            <span style="padding-left:150px;">@String.Format("{0:#,##0}đ", total)</span>
+                        </h5>
+
+                        <div>
+                            @Html.ActionLink("Xóa", "RemoveCart", "ShoppingCart", new { id = item._sanpham.IdSP, size = item._size }, null)
+                        </div>
+                    </div>
+                </div>
+            </li>
+        }
+
+        <li class="list-group-item d-flex justify-content-between" style="background-color: white;">
+            <div>
+                <span>Tổng cộng: </span>
+                <strong>@String.Format("{0:#,##0}đ", Model.Total_money())</strong>
+            </div>
+
+            <div>
+                <span>Sử dụng điểm tích lũy: </span>
+                <strong>@String.Format("{0:#,##0}", ((Session["customer"] as KhachHang).DiemTichLuy))</strong> &ensp;
+                <label class="switch">
+                    <input type="checkbox" id="mychecked" onclick="checkTest()">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </li>
+
+        <li class="list-group-item d-flex justify-content-between" style="background-color: #fb8d17;">
+            <div style="display: flex;">
+                <div>
+                    <span style="color: white">Thành tiền</span>
+                    <p style="color: white">
+                        <strong id="thanhtien">@String.Format("{0:#,##0}đ", Model.Total_money())</strong>
+                        <input type="hidden" id="tongdon" value="@Model.Total_money()" name="tongdon" />
+                    </p>
+                </div>
+                <div style="margin-left: 200px">
+                    <input type="submit" value="Thanh toán" class="btn_TT" id="submit-button" />
+                    <script>
+                        var button = document.querySelector('#submit-button');
+                        braintree.client.create({
+                            authorization: 'sandbox_csxzqqw4_rmpzt6z9vw4ncg6k'
+                        }, function (err, clientInstance) { // this is the client instance we need when creating a `dataCollector`
+
+                            braintree.dataCollector.create({
+                                client: clientInstance, // `clientInstance` not dropIn `instance'
+                                paypal: true
+                            }, function (err, dataCollectorInstance) {
+                                if (err) {
+                                    return;
+                                }
+                                console.log(dataCollectorInstance.deviceData);
+                                document.getElementById("deviceData").value = dataCollectorInstance.deviceData;
+                            });
+
+                            braintree.dropin.create({
+                                authorization: 'sandbox_csxzqqw4_rmpzt6z9vw4ncg6k',
+                                container: '#dropin-container'
+                            }, function (createErr, instance) {
+                                button.addEventListener('click', function () {
+                                    instance.requestPaymentMethod(function (requestPaymentMethodErr, payload) {
+                                        console.log(payload);
+                                        document.getElementById("nonce").value = payload.nonce;
+                                        document.getElementById("formthanhtoan").submit();
+                                    });
+                                });
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+
+    <div style="text-align: center">
+        <a href="/ShoppingCart/ClearCart" style="color: #fb8d17;"><i class="fa fa-trash"></i> Xóa giỏ hàng</a>
+    </div>
+    <div id="alertMsgPay" style="margin-top: 10px;"><b>@Session["MessagePayment"]</b></div>
+    <div id="alertMsgTotalQuan" style="margin-top: 10px;"><b>@Session["MessageTotalQuantity"]</b></div>
+</div>
+    }
+</div>
+
+<script>
+    // Messgae Payment
+    console.log('@Session["MessagePayment"]');
+    if ('@Session["MessagePayment"]' === '') {
+        document.getElementById("alertMsgPay").className = document.getElementById("alertMsgPay").className;
+    }
+    else {
+        document.getElementById("alertMsgPay").className = "alert alert-danger";
+    }
+
+    // Message Total Quantity
+    if ('@Session["MessageTotalQuantity"]' === '') {
+        document.getElementById("alertMsgTotalQuan").className = document.getElementById("alertMsgTotalQuan").className;
+    }
+    else {
+        document.getElementById("alertMsgTotalQuan").className = "alert alert-danger";
+    }
+</script>
+
+
+@Scripts.Render("~/bundles/bootstrap")
+
