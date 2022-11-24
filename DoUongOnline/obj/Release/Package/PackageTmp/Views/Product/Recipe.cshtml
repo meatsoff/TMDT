@@ -1,0 +1,43 @@
+﻿@model IEnumerable<DoUongOnline.DB.CongThuc>
+
+@{
+    ViewBag.Title = "Recipe";
+    Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
+}
+
+<ol class="breadcrumb" style="font-size:large">
+    <li class="breadcrumb-item">
+        <a>Quản lý</a>
+    </li>
+    <li class="breadcrumb-item active">Công thức</li>
+</ol>
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.NguyenLieu.TenNL)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DinhLuong)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DonVi)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NguyenLieu.TenNL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DinhLuong)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DonVi)
+            </td>
+
+
+        </tr>
+    }
+</table>

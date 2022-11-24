@@ -21,7 +21,6 @@ namespace DoUongOnline.DB
         {
             this.ChiTietDonHangs = new HashSet<ChiTietDonHang>();
             this.CongThucs = new HashSet<CongThuc>();
-            HinhAnh = "~/Content/Images/null.jpg";
         }
     
         public int IdSP { get; set; }
@@ -40,7 +39,6 @@ namespace DoUongOnline.DB
         public virtual ICollection<CongThuc> CongThucs { get; set; }
         public virtual KhuyenMai KhuyenMai { get; set; }
         public virtual LoaiSanPham LoaiSanPham { get; set; }
-        public virtual ICollection<CongThuc> CongThuc { get; set; }
         [NotMapped]
         public HttpPostedFileBase UploadImage { get; set; }
     }

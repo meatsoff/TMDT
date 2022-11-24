@@ -1,0 +1,274 @@
+﻿@model IEnumerable<DoUongOnline.DB.ChiTietDonHang>
+@using DoUongOnline.DB
+@{
+    ViewBag.Title = "Giỏ hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    * {
+        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    }
+
+    .container {
+        max-width: 960px;
+        margin-top: 50px;
+        margin-bottom: 100px;
+    }
+
+    h2 {
+        text-align: center;
+        color: black;
+    }
+
+    label {
+        font-weight: normal !important;
+    }
+
+    .title_h4 {
+        color: black;
+    }
+
+    .flex {
+        display: flex;
+        align-items: center;
+    }
+
+    .iconpay {
+        height: 40px;
+    }
+
+    .gach_dai {
+        height: 1px;
+        border-width: 0;
+        color: gray;
+        background-color: gray;
+    }
+
+    .gach_ngan {
+        height: 2px;
+        color: #fb8d17;
+        background-color: #fb8d17;
+        width: 70px;
+        text-align: left;
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 22px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 17px;
+            width: 17px;
+            left: 3px;
+            bottom: 2.6px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #fb8d17;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #fb8d17;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(17px);
+        -ms-transform: translateX(17px);
+        transform: translateX(17px);
+    }
+
+    /*Rounded sliders*/
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+    .btn_TT {
+        border: none !important;
+        border-radius: 50px;
+        background-color: white;
+        color: #fb8d17;
+        height: 50px;
+        width: 120px
+    }
+
+    .list-group {
+        border-radius: 5px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    #tinhtrang {
+        text-align: center;
+    }
+</style>
+
+
+<div class="container">
+    <h2>Chi tiết đơn hàng</h2>
+    <h4 id="tinhtrang">@((Session["DonHang"] as DonHang).TinhTrangDonHang.TenTinhTrangDH)</h4>
+
+    <script>
+        console.log('@((Session["DonHang"] as DonHang).TinhTrangDonHang.TenTinhTrangDH)');
+        if ('@((Session["DonHang"] as DonHang).IdTinhTrangDH)' == "1") {
+            document.getElementById("tinhtrang").style.color = '#ceca4b';
+        }
+        else if ('@((Session["DonHang"] as DonHang).IdTinhTrangDH)' == "2") {
+            document.getElementById("tinhtrang").style.color = 'orange';
+        }
+        else if ('@((Session["DonHang"] as DonHang).IdTinhTrangDH)' == "3") {
+            document.getElementById("tinhtrang").style.color = 'blue';
+        }
+        else if ('@((Session["DonHang"] as DonHang).IdTinhTrangDH)' == "4") {
+            document.getElementById("tinhtrang").style.color = 'violet';
+        }
+        else if ('@((Session["DonHang"] as DonHang).IdTinhTrangDH)' == "5") {
+            document.getElementById("tinhtrang").style.color = 'limegreen';
+        }
+        else if ('@((Session["DonHang"] as DonHang).IdTinhTrangDH)' == "6") {
+            document.getElementById("tinhtrang").style.color = 'red';
+        }
+    </script>
+
+    @*LEFT*@
+    <div class="col-lg-6">
+        <h4 class="title_h4">Thông tin nhận hàng</h4>
+        <hr class="gach_ngan" />
+        <div>
+            <label for="fullName" class="form-label">Tên khách hàng</label>
+            <input type="text" class="form-control" id="fullName" placeholder="" value="@((Session["customer"] as KhachHang).TenKhachHang)" readonly>
+        </div>
+
+        <div>
+            <label for="numPhone" class="form-label">Số điện thoại</label>
+            <input type="text" class="form-control" id="numPhone" value="@((Session["customer"] as KhachHang).SDTKH)" readonly>
+        </div>
+
+        <div>
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" value="@((Session["customer"] as KhachHang).EmailKH)" id="email" readonly>
+        </div>
+
+        <div>
+            <label for="address" class="form-label">Địa chỉ nhận hàng</label>
+            <input type="text" class="form-control" id="address" value="@((Session["DonHang"] as DonHang).DiaChiGiaoHang)" readonly>
+        </div>
+
+        <div>
+            <label for="note" class="form-label">Ghi chú đơn hàng</label>
+            <textarea class="form-control" id="note" rows="4" cols="50" readonly>@((Session["DonHang"] as DonHang).GhiChu)</textarea>
+        </div>
+    </div>
+
+    @*RIGHT*@
+    <div class="col-lg-6">
+        <h4 class="title_h4">
+            <span>Các món đã chọn</span>
+        </h4>
+        <hr class="gach_ngan" />
+
+        <ul class="list-group mb-3">
+            @{decimal totalBill = 0;}
+            @foreach (var item in Model)
+            {
+                decimal total = item.SoLuong * (decimal)item.GiaBan;
+                totalBill += total;
+                <li class="list-group-item d-flex justify-content-between lh-sm" style="background-color: white;">
+                    <div style="display: flex;">
+                        <div style="margin: 5px 5px 0 0">
+                            <img src="@Url.Content(item.SanPham.HinhAnh)" height="80" width="80" />
+                        </div>
+                        <div>
+                            <div>
+                                <h5><b>@item.SoLuong x @item.SanPham.TenSP</b></h5>
+                            </div>
+                            <h5>
+                                <span>@item.SizeSanPham.SizeSP, @item.SoLuong x @item.SizeSanPham.SizeSP</span>
+                                <span style="padding-left:150px;">@String.Format("{0:#,##0}đ", total)</span>
+                            </h5>
+                        </div>
+                    </div>
+                </li>
+            }
+
+            <li class="list-group-item d-flex justify-content-between" style="background-color: white;">
+                <div>
+                    <span>Tổng tiền đơn hàng: </span>
+                    <strong>@String.Format("{0:#,##0}đ", totalBill)</strong>
+                </div>
+
+                <div>
+                    <span>Điểm sử dụng: </span>
+                    <strong>@String.Format("{0:#,##0}", ((Session["DonHang"] as DonHang).DiemKHSuDung))</strong> &ensp;
+                </div>
+            </li>
+
+            <li class="list-group-item d-flex justify-content-between" style="background-color: #fb8d17;">
+                <div>
+                    <span style="color: white">Thành tiền</span>
+                    <p style="color: white">
+                        <strong id="thanhtien">@String.Format("{0:#,##0}đ", ((Session["DonHang"] as DonHang).TongTien))</strong>
+                    </p>
+                </div>
+            </li>
+        </ul>
+
+        <div class="btn_CTDH">
+            @using (Html.BeginForm("CancelOrder", "Order", new { id = Session["idDH"] }))
+            {
+                <div style="color: red; text-align: center;">
+                    <i class="fa fa-trash"></i>
+                    <input type="submit" value="Hủy đơn hàng" class="btn_HDH" style="border: none; background: none; text-align: right;" />
+                </div>
+            }
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <input type="button" value="Quay về danh sách đơn hàng" onclick="location.href = '@Url.Action("MyOrdersList", "Order")';" style="width: 100%; height: 50px; color: #fb8d17; background-color: white; border-radius: 5px; border: solid 1px #fb8d17"/>
+        </div>
+        
+
+        @if (TempData["Message_CancelOrder"] != null)
+        {
+            <br />
+            <div class="alert alert-danger"><b>@TempData["Message_CancelOrder"]</b></div>
+            TempData["Message_CancelOrder"] = null;
+        }
+    </div>
+
+</div>
+
+
+@Scripts.Render("~/bundles/bootstrap")
+
+

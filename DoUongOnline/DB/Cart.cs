@@ -27,17 +27,17 @@ namespace DoUongOnline.DB
             // Kiểm tra sản phẩm có chương trình khuyến mãi hay không
             if (_sp.IdKM == null)   // Sản phẩm không có khuyến mãi
             {
-                if (SetSize == "Large")
+                if (SetSize == "Vang")
                 {
-                    _sp.GiaBan += 6000;
-                    var item = Items.Where(s => s._sanpham.IdSP == _sp.IdSP && s._size == "Lớn").FirstOrDefault();
+                    _sp.GiaBan += 200000;
+                    var item = Items.Where(s => s._sanpham.IdSP == _sp.IdSP && s._size == "Vang").FirstOrDefault();
                     if (item == null)
                     {
                         items.Add(new CartItem
                         {
                             _sanpham = _sp,
-                            _size = "Lớn",
-                            _quantity = _quan
+                            _size = "Vang",
+                            _quantity = _quan  
 
                         });
                     }
@@ -49,13 +49,13 @@ namespace DoUongOnline.DB
                 }
                 else
                 {
-                    var itemVua = Items.Where(s => s._sanpham.IdSP == _sp.IdSP && s._size == "Vừa").FirstOrDefault();
+                    var itemVua = Items.Where(s => s._sanpham.IdSP == _sp.IdSP && s._size == "Den").FirstOrDefault();
                     if (itemVua == null)
                     {
                         items.Add(new CartItem
                         {
                             _sanpham = _sp,
-                            _size = "Vừa",
+                            _size = "Den",
                             _quantity = _quan
                         });
                     }
@@ -69,18 +69,18 @@ namespace DoUongOnline.DB
 
             else // Sản phẩm có khuyến mãi
             {
-                if (SetSize == "Large")
+                if (SetSize == "Vang")
                 {
-                    _sp.GiaBan += 6000;
+                    _sp.GiaBan += 200000;
                     // Kiểm tra ly nước size lớn đã dùng khuyến mãi hay chưa
-                    var item = Items.Where(s => s._sanpham.IdSP == _sp.IdSP && s._size == "Lớn" && s._khuyenmai == "DaDung").FirstOrDefault();
+                    var item = Items.Where(s => s._sanpham.IdSP == _sp.IdSP && s._size == "Vang" && s._khuyenmai == "DaDung").FirstOrDefault();
                     if (item == null)   // Chưa sử dụng
                     {
                         _sp.GiaBan = _sp.GiaBan - (_sp.GiaBan * _sp.KhuyenMai.PhanTramKM) / 100; // Update giá khuyến mãi
                         items.Add(new CartItem
                         {
                             _sanpham = _sp,
-                            _size = "Lớn",
+                            _size = "Vang",
                             _quantity = 1, 
                             _khuyenmai = "DaDung"
 
@@ -89,13 +89,13 @@ namespace DoUongOnline.DB
                     else    // Đã sử dụng
                     {
                         // Tạo một item mới để lưu sản phẩm với giá không khuyến mãi
-                        var itemSauKM = Items.Where(s => s._sanpham.IdSP == _sp.IdSP && s._size == "Lớn" && s._khuyenmai == null).FirstOrDefault();
+                        var itemSauKM = Items.Where(s => s._sanpham.IdSP == _sp.IdSP && s._size == "Vang" && s._khuyenmai == null).FirstOrDefault();
                         if (itemSauKM == null)
                         {
                             items.Add(new CartItem
                             {
                                 _sanpham = _sp,
-                                _size = "Lớn",
+                                _size = "Vang",
                                 _quantity = _quan
 
                             });
@@ -110,14 +110,14 @@ namespace DoUongOnline.DB
                 else
                 {
                     // Kiểm tra ly nước size nhỏ đã dùng khuyến mãi hay chưa
-                    var itemVua = Items.Where(s => s._sanpham.IdSP == _sp.IdSP && s._size == "Vừa" && s._khuyenmai == "DaDung").FirstOrDefault();
+                    var itemVua = Items.Where(s => s._sanpham.IdSP == _sp.IdSP && s._size == "Den" && s._khuyenmai == "DaDung").FirstOrDefault();
                     if (itemVua == null)    // Chưa sử dụng
                     {
                         _sp.GiaBan = _sp.GiaBan - (_sp.GiaBan * _sp.KhuyenMai.PhanTramKM) / 100; // Update giá khuyến mãi
                         items.Add(new CartItem
                         {
                             _sanpham = _sp,
-                            _size = "Vừa",
+                            _size = "Den",
                             _quantity = 1,
                             _khuyenmai = "DaDung"
                         });
@@ -125,13 +125,13 @@ namespace DoUongOnline.DB
                     else    // Đã sử dụng
                     {
                         // Tạo một item mới để lưu sản phẩm với giá không khuyến mãi
-                        var itemVuaSauKM = Items.Where(s => s._sanpham.IdSP == _sp.IdSP && s._size == "Vừa" && s._khuyenmai == null).FirstOrDefault();
+                        var itemVuaSauKM = Items.Where(s => s._sanpham.IdSP == _sp.IdSP && s._size == "Den" && s._khuyenmai == null).FirstOrDefault();
                         if (itemVuaSauKM == null)
                         {
                             items.Add(new CartItem
                             {
                                 _sanpham = _sp,
-                                _size = "Vừa",
+                                _size = "Den",
                                 _quantity = _quan
                             });
                         }
@@ -178,13 +178,13 @@ namespace DoUongOnline.DB
         // Xóa sản phẩm trong giỏ hàng
         public void Remove_CartIem(int id, string _size)
         {
-            if (_size == "Lớn")
+            if (_size == "Vang")
             {
-                items.RemoveAll(s => s._sanpham.IdSP == id && s._size == "Lớn");
+                items.RemoveAll(s => s._sanpham.IdSP == id && s._size == "Vang");
             }
             else
             {
-                items.RemoveAll(s => s._sanpham.IdSP == id && s._size == "Vừa");
+                items.RemoveAll(s => s._sanpham.IdSP == id && s._size == "Den");
             }
 
         }

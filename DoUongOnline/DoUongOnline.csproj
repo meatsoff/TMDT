@@ -253,11 +253,25 @@
     <Content Include="Content\Chart.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\Images\Ad1.jpg" />
     <Content Include="Content\Images\banner.jpg" />
     <Content Include="Content\Images\banner1.jpg" />
     <Content Include="Content\Images\banner2.jpg" />
     <Content Include="Content\Images\banner3.jpg" />
+    <Content Include="Content\Images\duocyeuthichicon.png" />
+    <Content Include="Content\Images\iconmomo.png" />
+    <Content Include="Content\Images\iconpaypal.jpg" />
+    <Content Include="Content\Images\icontienmat.jpg" />
+    <Content Include="Content\Images\iphone-14-pro-bac.jpg" />
+    <Content Include="Content\Images\iPhone-logo.jpg" />
+    <Content Include="Content\Images\nokia-g11.jpg" />
+    <Content Include="Content\Images\nokialogo.jpg" />
     <Content Include="Content\Images\null.jpg" />
+    <Content Include="Content\Images\samsung-galaxy-a23.jpg" />
+    <Content Include="Content\Images\sm-galaxy-s22.jpg" />
+    <Content Include="Content\Images\sslogo.png" />
+    <Content Include="Content\Images\vsmart-live-4.jpg" />
+    <Content Include="Content\Images\Vsmart-logo.jpg" />
     <Content Include="Content\PagedList.css" />
     <Content Include="DB\Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
